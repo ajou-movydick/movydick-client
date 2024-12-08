@@ -15,3 +15,47 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+h1, h2, p, span {
+  color: white;
+  font-weight: 500;
+}
+
+input[type="text"] {
+  background-color: #141414;
+  border: 1px solid #B3B3B3;
+  border-radius: 8px;
+  color: white;
+  height: 34px;
+  padding: 8px 12px;
+}
+
+[type="checkbox"] {
+  accent-color: #489fb5;
+}
+
+:root {
+  /* colors */
+  --primary: #1884EF;
+  --secondary: #0B2447;
+  --teriary: #00A2B8;
+  --positive: #29DB19;
+  --warning: #DB1919;
+  --delay: #DB7619;
+
+  /* weight */
+  --bold: 900;
+  --semi-bold: 700;
+  --regular: 500;
+
+  /* width & height */
+  --header-height: 60px;
+}
+
+button {
+  @apply font-bold cursor-pointer;
+}
+
+label {
+  @apply cursor-pointer;
+}

@@ -1,0 +1,5 @@
+.boxContainer {
+    /*border: 1px solid var(--teriary);*/
+    background-color: #141414;
+    @apply rounded-lg overflow-hidden;
+}

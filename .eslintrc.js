@@ -41,6 +41,7 @@ module.exports = {
 
         // react.js
         "react/react-in-jsx-scope": "off",
+        "react/prop-types": "off"
         // "react/prop-typezs": "off",
 
         // // plugins
