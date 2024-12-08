@@ -1,4 +1,4 @@
-const API_URL = "http://15.165.89.61:8080/api";
+const API_URL = "https://15.165.89.61/api";
 
 async function fetchPost(url, body, setter) {
     try {
