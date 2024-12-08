@@ -4,6 +4,7 @@ async function fetchPost(url, body, setter) {
     try {
         const response = await fetch(API_URL + url, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -28,6 +29,7 @@ async function fetchGet(url, setter) {
     try {
         const response = await fetch(API_URL + url, {
             method: 'GET',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
