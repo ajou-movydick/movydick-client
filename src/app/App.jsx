@@ -6,6 +6,8 @@ import Inquiry from "../components/inquiry/Inquiry";
 import Tendency from "../components/tendency/Tendency";
 import { useEffect, useState } from "react";
 import { dataConverter, fetchGet } from "../common";
+import LoadingSpinner from "../components/loadingspinner/LoadingSpinner";
+
 
 function App() {
     const [ethPriceData, setEth] = useState([]);
@@ -22,11 +24,13 @@ function App() {
 
     const [assetValue, setAssetValue] = useState('10,000');
 
+    const [isLoading, setIsLoading] = useState(false);
+
 
 
     useEffect(() => {
         (async () => {
-            const res = await fetchGet('/init/');
+            const res = await fetchGet('/init/', setIsLoading);
             if (res?.top[0]?.graph_data?.eth_prices) dataConverter(res.top[0].graph_data.eth_prices, setEth);
             if (res?.top[0]?.graph_data?.withdrawal_freq) dataConverter(res.top[0].graph_data.withdrawal_freq, setGWD);
             if (res?.top[0]?.tlcc_graph_data?.withdrawal_freq) dataConverter(res.top[0].tlcc_graph_data.withdrawal_freq, setTWD);
@@ -46,11 +50,13 @@ function App() {
     return (
         <div id="App">
             {/*HEADER area*/}
+            <LoadingSpinner isLoading={isLoading} />
+
             <Header />
 
             <div className={'flex flex-row gap-2'}>
                 {/*NAV (left) area*/}
-                <nav className={'w-1/3 flex flex-col gap-2'} style={{ height: 'calc(100vh - 160px)' }}>
+                <nav className={'w-[35%] flex flex-col gap-2'} style={{ height: 'calc(100vh - 160px)' }}>
                     <Box className={'w-full px-6 py-9'}>
                         <Inquiry dateRange={dateRange}
                             setDateRange={setDateRange}
@@ -58,6 +64,7 @@ function App() {
                             setStrat={setStrat}
                             assetValue={assetValue}
                             setAssetValue={setAssetValue}
+                            setIsLoading={setIsLoading}
                         />
                     </Box>
                     <Box className={'w-full px-6 py-9'} style={{ height: 'calc(100% - 400px)' }}>
@@ -71,12 +78,13 @@ function App() {
                             setTD={setTD}
                             setBuySellDates={setBuySellDates}
                             assetValue={assetValue}
+                            setIsLoading={setIsLoading}
                         />
                     </Box>
                 </nav>
 
                 {/*CHART (right) area*/}
-                <Box className={'w-2/3 p-8'}>
+                <Box className={'w-[65%] p-8'}>
                     <MainChart
                         ethPriceData={ethPriceData}
                         graphWithdrawData={graphWithdrawData}

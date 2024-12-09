@@ -347,7 +347,7 @@ const TOP_DUMMY = {
     ]
 };
 
-const Tendency = ({ fixedDateRange, strat, setEth, setGWD, setTWD, setGD, setTD, setBuySellDates, assetValue }) => {
+const Tendency = ({ fixedDateRange, strat, setEth, setGWD, setTWD, setGD, setTD, setBuySellDates, assetValue, setIsLoading }) => {
     const TENDENCIES = Object.freeze({
         BASIC: {
             text: 'Balanced',
@@ -381,7 +381,7 @@ const Tendency = ({ fixedDateRange, strat, setEth, setGWD, setTWD, setGD, setTD,
                 combination: comb,
                 buy_signal: buy,
                 sell_signal: sell,
-            });
+            }, setIsLoading);
             if (res?.graph_data?.eth_prices) dataConverter(res.graph_data.eth_prices, setEth);
             if (res?.graph_data?.withdrawal_freq) dataConverter(res.graph_data.withdrawal_freq, setGWD);
             if (res?.tlcc_graph_data?.withdrawal_freq) dataConverter(res.tlcc_graph_data.withdrawal_freq, setTWD);

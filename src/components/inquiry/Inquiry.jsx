@@ -261,7 +261,7 @@ const STRAT_DUMMY = {
     ]
 };
 
-const Inquiry = ({ dateRange, setDateRange, setFixedDateRange, setStrat, assetValue, setAssetValue }) => {
+const Inquiry = ({ dateRange, setDateRange, setFixedDateRange, setStrat, assetValue, setAssetValue, setIsLoading }) => {
     const [calVis, setCalVis] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState(['deposit_freq', 'withdrawal_freq']);
 
@@ -321,7 +321,7 @@ const Inquiry = ({ dateRange, setDateRange, setFixedDateRange, setStrat, assetVa
                 end_date: dateRange[1],
                 combination: selectedOptions,
                 asset: parseInt(assetValue.replace('$', '').replace(',', ''))
-            });
+            }, setIsLoading);
             // const res = STRAT_DUMMY;
             setStrat(res);
             setFixedDateRange(dateRange);
@@ -330,7 +330,7 @@ const Inquiry = ({ dateRange, setDateRange, setFixedDateRange, setStrat, assetVa
 
     return (
         <div>
-            <div className={'mb-4'}>
+            <div className={'mb-3'}>
                 <p className={'mb-1 font-bold'}>Date</p>
                 <div className={'flex items-center w-full'}>
                     <input

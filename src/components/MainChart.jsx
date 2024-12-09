@@ -206,7 +206,7 @@ const MainChart = ({ ethPriceData, graphWithdrawData, tlccWithdrawData, graphDep
             <ChartComponent
                 graphData={ethPriceData}
                 chartId="ethPrice"
-                height={428}
+                height={314}
                 timeScale={syncedTimeScale.current}
                 buySellDates={buySellDates}
                 showTooltip={true}
@@ -214,25 +214,25 @@ const MainChart = ({ ethPriceData, graphWithdrawData, tlccWithdrawData, graphDep
             <ChartComponent
                 graphData={graphWithdrawData}
                 chartId="graphWithdraw"
-                height={107}
+                height={100}
                 timeScale={syncedTimeScale.current}
             />
             <ChartComponent
                 graphData={tlccWithdrawData}
                 chartId="tlccWithdraw"
-                height={107}
+                height={100}
                 timeScale={null}
             />
             <ChartComponent
                 graphData={graphDepositData}
                 chartId="graphDeposit"
-                height={107}
+                height={100}
                 timeScale={syncedTimeScale.current}
             />
             <ChartComponent
                 graphData={tlccDepositData}
                 chartId="tlccDeposit"
-                height={107}
+                height={100}
                 timeScale={null}
             />
         </div>

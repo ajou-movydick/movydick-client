@@ -1,10 +1,12 @@
-const API_URL = "https://15.165.89.61/api";
+const API_URL = "http://15.165.89.61/api";
 
-async function fetchPost(url, body, setter) {
+async function fetchPost(url, body, loadingCb) {
     try {
+        if (loadingCb) loadingCb(true);
+
         const response = await fetch(API_URL + url, {
             method: 'POST',
-            credentials: 'include',
+            // credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -16,20 +18,23 @@ async function fetchPost(url, body, setter) {
         }
 
         const data = await response.json();
-        if (setter) setter(data);
 
         return data;
     } catch (error) {
         console.error('Error:', error);
         throw error;
+    } finally {
+        if (loadingCb) loadingCb(false);
     }
 }
 
-async function fetchGet(url, setter) {
+async function fetchGet(url, loadingCb) {
     try {
+        if (loadingCb) loadingCb(true);
+
         const response = await fetch(API_URL + url, {
             method: 'GET',
-            credentials: 'include',
+            // credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -40,12 +45,13 @@ async function fetchGet(url, setter) {
         }
 
         const data = await response.json();
-        if (setter) setter(data);
 
         return data;
     } catch (error) {
         console.error('Error:', error);
         throw error;
+    } finally {
+        if (loadingCb) loadingCb(false);
     }
 }
 
