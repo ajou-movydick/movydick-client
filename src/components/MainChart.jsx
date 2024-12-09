@@ -8,6 +8,8 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
     useEffect(() => {
         if (!chartContainerRef.current) return;
 
+        const isTLCCChart = chartId === 'tlccWithdraw' || chartId === 'tlccDeposit';
+
         const chartOptions = {
             layout: {
                 textColor: '#FFFFFF',
@@ -27,33 +29,62 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
                     labelVisible: true,
                 },
             },
-            timeScale: chartId === 'tlccWithdraw' || chartId === 'tlccDeposit' ? {
+            timeScale: isTLCCChart ? {
                 timeVisible: false,
                 borderColor: '#333',
-                tickMarkFormatter: (time) => {
-                    return (time + 1).toString();
+                tickMarkFormatter: (time) => (time + 1).toString(),
+                fixLeftEdge: true,
+                fixRightEdge: true,
+                rightOffset: 0,
+            } : {
+                timeVisible: true,
+                borderColor: '#333',
+            },
+            localization: {
+                timeFormatter: isTLCCChart ?
+                    (time) => `Lag: ${(time + 1)}` :
+                    (time) => new Date(time * 1000).toLocaleDateString(),
+            },
+            grid: {
+                vertLines: {
+                    color: 'rgba(42, 46, 57, 0.6)',
                 },
-            } : undefined,
+                horzLines: {
+                    color: 'rgba(42, 46, 57, 0.6)',
+                },
+            },
         };
 
         const chart = createChart(chartContainerRef.current, chartOptions);
-        const areaSeries = chart.addAreaSeries({
+
+        const seriesOptions = {
             lineColor: '#2962FF',
             topColor: '#2962FF',
-            bottomColor: 'rgba(41, 98, 255, 0.28)'
-        });
+            bottomColor: 'rgba(41, 98, 255, 0.28)',
+            priceFormat: isTLCCChart ? {
+                type: 'custom',
+                minMove: 0.0001,
+                formatter: (price) => price.toFixed(4),
+            } : {
+                type: 'price',
+                precision: 2,
+                minMove: 0.01,
+            },
+        };
 
-        if (chartId === 'tlccWithdraw' || chartId === 'tlccDeposit') {
+        const areaSeries = chart.addAreaSeries(seriesOptions);
+
+        if (isTLCCChart) {
             const indexedData = graphData.map((item, index) => ({
-                ...item,
                 time: index,
+                value: item.value
             }));
             areaSeries.setData(indexedData);
         } else {
             areaSeries.setData(graphData);
         }
 
-        if (buySellDates && buySellDates.length > 0) {
+        if (buySellDates && buySellDates.length > 0 && !isTLCCChart) {
             const markers = buySellDates
                 .map(signal => ({
                     time: signal.date.split(' ')[0],
@@ -93,20 +124,22 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
                     toolTip.style.display = 'none';
                 } else {
                     const data = param.seriesData.get(areaSeries);
-                    const dateStr = new Date(param.time * 1000).toLocaleDateString();
+                    const timeStr = isTLCCChart ?
+                        `Index: ${param.time + 1}` :
+                        new Date(param.time * 1000).toLocaleDateString();
 
                     if (data) {
                         const price = data.value !== undefined ? data.value : data.close;
                         toolTip.style.display = 'block';
                         toolTip.innerHTML = `
-                            <div style="font-weight: bold; margin-bottom: 4px">${dateStr}</div>
-                            <div>Value: $${price.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+                            <div style="font-weight: bold; margin-bottom: 4px">${timeStr}</div>
+                            <div>Value: ${price.toLocaleString(undefined, {
+        minimumFractionDigits: isTLCCChart ? 4 : 2,
+        maximumFractionDigits: isTLCCChart ? 4 : 2
     })}</div>
                         `;
 
-                        toolTip.style.left = param.point.x + 390 + 'px';
+                        toolTip.style.left = param.point.x + 530 + 'px';
                         toolTip.style.top = param.point.y + 50 + 'px';
                     }
                 }
