@@ -56,7 +56,7 @@ function App() {
 
             <div className={'flex flex-row gap-2'}>
                 {/*NAV (left) area*/}
-                <nav className={'w-[35%] flex flex-col gap-2'} style={{ height: 'calc(100vh - 160px)' }}>
+                <nav className={'w-[35%] flex flex-col gap-2'} style={{ height: 'calc(100vh - 150px)' }}>
                     <Box className={'w-full px-6 py-9'}>
                         <Inquiry dateRange={dateRange}
                             setDateRange={setDateRange}

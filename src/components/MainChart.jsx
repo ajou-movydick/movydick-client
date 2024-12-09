@@ -203,36 +203,41 @@ const MainChart = ({ ethPriceData, graphWithdrawData, tlccWithdrawData, graphDep
 
     return (
         <div className="w-full h-full">
+            <h1 className={'mb-2'}>Ethereum Price (ETH)</h1>
             <ChartComponent
                 graphData={ethPriceData}
                 chartId="ethPrice"
-                height={314}
+                height={231}
                 timeScale={syncedTimeScale.current}
                 buySellDates={buySellDates}
                 showTooltip={true}
             />
+            <h1 className={'mb-2 mt-2'}>Withdrawal Frequency</h1>
             <ChartComponent
                 graphData={graphWithdrawData}
                 chartId="graphWithdraw"
-                height={100}
+                height={77}
                 timeScale={syncedTimeScale.current}
             />
+            <h1 className={'mb-2 mt-2'}>Withdrawal Frequency TLCC</h1>
             <ChartComponent
                 graphData={tlccWithdrawData}
                 chartId="tlccWithdraw"
-                height={100}
+                height={77}
                 timeScale={null}
             />
+            <h1 className={'mb-2 mt-2'}>Deposit Frequency</h1>
             <ChartComponent
                 graphData={graphDepositData}
                 chartId="graphDeposit"
-                height={100}
+                height={77}
                 timeScale={syncedTimeScale.current}
             />
+            <h1 className={'mb-2 mt-2'}>Deposit Frequency TLCC</h1>
             <ChartComponent
                 graphData={tlccDepositData}
                 chartId="tlccDeposit"
-                height={100}
+                height={77}
                 timeScale={null}
             />
         </div>
