@@ -2,15 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { createChart } from 'lightweight-charts';
 import { TimeScaleSync } from "../common";
 
-const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, showTooltip, isCompChart }) => {
+
+const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, showTooltip }) => {
     const chartContainerRef = useRef(null);
     const chartRef = useRef(null);
-    const tooltipRef = useRef(null);
-    const mouseMoveListenerRef = useRef(null);
 
     useEffect(() => {
         if (!chartContainerRef.current) return;
-
 
         const chartOptions = {
             layout: {
@@ -32,12 +30,15 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
                 },
             },
             timeScale: {
-                timeVisible: true,
+                timeVisible: false,
                 borderColor: '#333',
+                tickMarkFormatter: (time) => (time + 1).toString(),
+                fixLeftEdge: true,
+                fixRightEdge: true,
+                rightOffset: 0,
             },
             localization: {
-                timeFormatter:
-                    (time) => new Date(time * 1000).toLocaleDateString(),
+                timeFormatter: (time) => `Lag: ${(time + 1)}`
             },
             grid: {
                 vertLines: {
@@ -56,24 +57,28 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
             topColor: '#00A2B8',
             bottomColor: 'rgba(0, 162, 184, 0.3)',
             priceFormat: {
-                type: 'price',
-                precision: 2,
-                minMove: 0.01,
-            },
+                type: 'custom',
+                minMove: 0.0001,
+                formatter: (price) => price.toFixed(4),
+            }
         };
 
         const areaSeries = chart.addAreaSeries(seriesOptions);
 
-        areaSeries.setData(graphData);
-
+        const indexedData = graphData.map((item, index) => ({
+            time: index,
+            value: item.value
+        }));
+        areaSeries.setData(indexedData);
+       
         if (buySellDates && buySellDates.length > 0) {
             const markers = buySellDates
-                .map((signal, i) => ({
+                .map(signal => ({
                     time: signal.date.split(' ')[0],
                     position: 'aboveBar',
-                    color: signal.action === 'BUY' ? (isCompChart ? '#FFA500' : '#FF4444') : (isCompChart ? '#00FF00' : '#4444FF'),
+                    color: signal.action === 'BUY' ? '#FF4444' : '#4444FF',
                     shape: 'arrowDown',
-                    text: `${signal.action} ${i}${isCompChart ? '' : ''}`
+                    text: signal.action
                 }))
                 .sort((a, b) => {
                     const timeA = new Date(a.time).getTime();
@@ -83,11 +88,7 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
             areaSeries.setMarkers(markers);
         }
 
-
         if (showTooltip) {
-            if (tooltipRef.current && chartContainerRef.current.contains(tooltipRef.current)) {
-                chartContainerRef.current.removeChild(tooltipRef.current);
-            }
             const toolTip = document.createElement('div');
             toolTip.style.position = 'absolute';
             toolTip.style.display = 'none';
@@ -110,28 +111,23 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
                     toolTip.style.display = 'none';
                 } else {
                     const data = param.seriesData.get(areaSeries);
-                    const timeStr = new Date(param.time * 1000).toLocaleDateString();
+                    const timeStr = `Lag: ${param.time + 1}`;
 
                     if (data) {
                         const price = data.value !== undefined ? data.value : data.close;
                         toolTip.style.display = 'block';
                         toolTip.innerHTML = `
-                            <div style="font-weight: bold; margin-bottom: 4px">${timeStr}${isCompChart ? ' (Comparison)' : ''}</div>
+                            <div style="font-weight: bold; margin-bottom: 4px">${timeStr}</div>
                             <div>Value: ${price.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4
     })}</div>
                         `;
-                        const handleMouseMove = (e) => {
-                            if (toolTip.style.display === 'block') {
-                                toolTip.style.left = `${e.pageX + 10}px`;
-                                toolTip.style.top = `${e.pageY - 30}px`;
-                            }
-                        };
 
-                        mouseMoveListenerRef.current = handleMouseMove;
-
-                        window.addEventListener('mousemove', handleMouseMove);
+                        window.addEventListener('mousemove', (e) => {
+                            toolTip.style.left = e.x + 'px';
+                            toolTip.style.top = e.y + 'px';
+                        });
                     }
                 }
 
@@ -174,76 +170,47 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
         chartRef.current = chart;
 
         return () => {
-            if (mouseMoveListenerRef.current) {
-                window.removeEventListener('mousemove', mouseMoveListenerRef.current);
-                mouseMoveListenerRef.current = null;
-            }
-
-            // Clean up tooltip
-            if (tooltipRef.current && chartContainerRef.current?.contains(tooltipRef.current)) {
-                chartContainerRef.current.removeChild(tooltipRef.current);
-                tooltipRef.current = null;
-            }
             window.removeEventListener('resize', handleResize);
+            // if (chartContainerRef.current && toolTip) {
+            //     chartContainerRef.current.removeChild(toolTip);
+            // }
             chart.unsubscribeCrosshairMove();
             timeScale?.unsubscribeAll();
             chart.remove();
         };
-    }, [graphData, height, timeScale, buySellDates, showTooltip, chartId, isCompChart]);
+    }, [graphData, height, timeScale, buySellDates, showTooltip, chartId]);
 
     return (
         <div ref={chartContainerRef} style={{ height: `${height}px` }} className="w-full" id={chartId} />
     );
 };
 
-const MainChart = ({
-    ethPriceData, ethPriceDataComp,
-    // selectedId, selectedIdComp,
-    graphWithdrawData, graphDepositData, buySellDates,
-    fixedSelectedId, fixedSelectedIdComp,
-}) => {
+
+
+const TlccChart = ({ ethPriceData, graphWithdrawData, tlccWithdrawData, graphDepositData, tlccDepositData, buySellDates }) => {
     const syncedTimeScale = useRef(new TimeScaleSync());
+
 
     return (
         <div className="w-full h-full">
-            <h1 className={'mb-2'}>Ethereum Price (ETH) {fixedSelectedId}</h1>
+            <h1 className={'mb-2 mt-2'}>Withdrawal Frequency TLCC</h1>
             <ChartComponent
-                graphData={ethPriceData}
-                chartId="ethPrice"
-                height={210}
-                timeScale={syncedTimeScale.current}
-                buySellDates={buySellDates}
+                graphData={tlccWithdrawData}
+                chartId="tlccWithdraw"
+                height={320}
+                timeScale={null}
                 showTooltip={true}
-                isCompChart={false}
             />
-            <h1 className={'mb-2'}>Ethereum Price (ETH) {fixedSelectedIdComp}</h1>
+            <h1 className={'mb-2 mt-2'}>Deposit Frequency TLCC</h1>
             <ChartComponent
-                graphData={ethPriceDataComp}
-                chartId="ethPriceComp"
-                height={210}
-                timeScale={syncedTimeScale.current}
-                buySellDates={buySellDates}
+                graphData={tlccDepositData}
+                chartId="tlccDeposit"
+                height={320}
+                timeScale={null}
                 showTooltip={true}
-                isCompChart={true}
-            />
-            <h1 className={'mb-2 mt-2'}>Withdrawal Frequency (Differentiated by TLCC)</h1>
-            <ChartComponent
-                graphData={graphWithdrawData}
-                chartId="graphWithdraw"
-                showTooltip={true}
-                height={77}
-                timeScale={syncedTimeScale.current}
-            />
-            <h1 className={'mb-2 mt-2'}>Deposit Frequency (Differentiated by TLCC)</h1>
-            <ChartComponent
-                graphData={graphDepositData}
-                chartId="graphDeposit"
-                showTooltip={true}
-                height={77}
-                timeScale={syncedTimeScale.current}
             />
         </div>
     );
 };
 
-export default MainChart;
+export default TlccChart;

@@ -75,8 +75,40 @@ function dataConverter(obj, setter) {
     }
 }
 
+class TimeScaleSync {
+    constructor() {
+        this.subscribers = new Set();
+        this.currentTimeScale = {};
+    }
+
+    subscribe(event, callback) {
+        this.subscribers.add(callback);
+        return () => this.subscribers.delete(callback);
+    }
+
+    unsubscribeAll() {
+        this.subscribers.clear();
+    }
+
+    setTimeScale(timeScale) {
+        this.currentTimeScale = timeScale;
+        this.notify(timeScale);
+    }
+
+    notify(params) {
+        this.subscribers.forEach(callback => callback(params));
+    }
+
+    crosshairMoved = {
+        emit: (param) => {
+            this.subscribers.forEach(callback => callback(param));
+        }
+    };
+}
+
 export {
     fetchPost,
     fetchGet,
     dataConverter,
+    TimeScaleSync
 };

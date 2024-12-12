@@ -261,7 +261,13 @@ const STRAT_DUMMY = {
     ]
 };
 
-const Inquiry = ({ dateRange, setDateRange, setFixedDateRange, setStrat, assetValue, setAssetValue, setIsLoading }) => {
+const Inquiry = ({
+    dateRange, setDateRange,
+    setFixedDateRange,
+    setStrat,
+    assetValue, setAssetValue,
+    setIsLoading,
+}) => {
     const [calVis, setCalVis] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState(['deposit_freq', 'withdrawal_freq']);
 
@@ -273,13 +279,13 @@ const Inquiry = ({ dateRange, setDateRange, setFixedDateRange, setStrat, assetVa
     };
 
     const mandatoryMappings = {
-        'Deposit frequency': 'deposit_freq',
-        'Withdrawal frequency': 'withdrawal_freq',
+        'Deposit freq': 'deposit_freq',
+        'Withdrawal freq': 'withdrawal_freq',
     };
 
     const optionMappings = {
         'Search volume': 'search_freq',
-        'Developer activity': 'daily_commits',
+        'Dev activity': 'daily_commits',
         'Netflow': 'netflow_eth'
     };
 
