@@ -218,6 +218,7 @@ const MainChart = ({
 
     return (
         <div className="w-full h-full">
+            <p className={'mb-4 text-2xl font-bold'}>Graphs</p>
             <h1 className={'mb-2'}>Ethereum Price (ETH) {fixedSelectedId}</h1>
             <ChartComponent
                 graphData={ethPriceData}

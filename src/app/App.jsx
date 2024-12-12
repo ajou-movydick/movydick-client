@@ -75,8 +75,9 @@ function App() {
                             setAssetValue={setAssetValue}
                             setIsLoading={setIsLoading}
                         />
-                    </Box>
-                    <Box className={'w-full px-6 py-8'} style={{ height: 'calc(100% - 10px)' }}>
+                        {/*</Box>*/}
+                        {/*<Box className={'w-full px-6 py-8'} style={{ height: 'calc(100% - 10px)' }}>*/}
+                        <hr className={'mb-4'} />
                         <Tendency
                             fixedDateRange={fixedDateRange}
                             strat={strat}

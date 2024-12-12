@@ -132,7 +132,7 @@ const Tendency = ({
                     }}
                 />
             </div>
-            <div className={'overflow-y-auto'} style={{ height: 'calc(100% - 54px)' }}>
+            <div className={'overflow-y-auto'} style={{ height: 'calc(100% - 505px)' }}>
                 {
                     res.strategies?.length > 0 &&
                     res.strategies.map((e, i) =>

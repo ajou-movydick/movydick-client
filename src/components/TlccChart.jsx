@@ -213,6 +213,7 @@ const TlccChart = ({ ethPriceData, graphWithdrawData, tlccWithdrawData, graphDep
 
     return (
         <div className="w-full h-full">
+            <p className={'mb-4 text-2xl font-bold'}>TLCC Differentials</p>
             <h1 className={'mb-2 mt-2'}>Withdrawal Frequency TLCC</h1>
             <ChartComponent
                 graphData={tlccWithdrawData}

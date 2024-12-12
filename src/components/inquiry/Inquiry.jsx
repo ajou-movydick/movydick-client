@@ -417,7 +417,7 @@ const Inquiry = ({
                 </div>
             </div>
             <button
-                className={`w-full h-11 text-white flex items-center justify-center rounded-lg text-xl transition-colors duration-300 ${
+                className={`w-full h-11 text-white flex items-center justify-center rounded-lg text-xl transition-colors duration-300 mb-7 ${
                     isButtonEnabled()
                         ? 'bg-[#014852] hover:bg-[#00A2B8] cursor-pointer'
                         : 'bg-gray-500 cursor-not-allowed'
