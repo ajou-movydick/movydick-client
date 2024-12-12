@@ -23,6 +23,7 @@ function App() {
     const [fixedDateRange, setFixedDateRange] = useState(['2020-11-08', '2024-11-08']);
 
     const [buySellDates, setBuySellDates] = useState([]);
+    const [buySellDatesComp, setBuySellDatesComp] = useState([]);
 
     const [assetValue, setAssetValue] = useState('10,000');
 
@@ -48,7 +49,8 @@ function App() {
                 setStrat({
                     strategies: res?.strategies
                 });
-                setBuySellDates(res?.strategies?.at(2)?.results?.at(0)?.buy_sell_dates || []);
+                setBuySellDates(res?.strategies?.at(0)?.results?.at(0)?.buy_sell_dates || []);
+                setBuySellDatesComp(res?.strategies?.at(0)?.results?.at(1)?.buy_sell_dates || []);
             }
         })();
     }, []);
@@ -85,6 +87,7 @@ function App() {
                             setGD={setGD}
                             setTD={setTD}
                             setBuySellDates={setBuySellDates}
+                            setBuySellDatesComp={setBuySellDatesComp}
                             assetValue={assetValue}
                             setIsLoading={setIsLoading}
                             selectedId={selectedId}
@@ -107,6 +110,7 @@ function App() {
                         graphWithdrawData={graphWithdrawData}
                         graphDepositData={graphDepositData}
                         buySellDates={buySellDates}
+                        buySellDatesComp={buySellDatesComp}
                         fixedSelectedId={fixedSelectedId}
                         fixedSelectedIdComp={fixedSelectedIdComp}
                     />

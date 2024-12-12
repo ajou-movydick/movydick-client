@@ -10,8 +10,7 @@ const Tendency = ({
     selectedId, selectedIdComp, setSelectedIdComp, setSelectedId,
     setFixedSelectedId,
     setFixedSelectedIdComp,
-    fixedSelectedId,
-    fixedSelectedIdComp
+    setBuySellDatesComp
 }) => {
     const TENDENCIES = Object.freeze({
         BASIC: {
@@ -64,7 +63,8 @@ const Tendency = ({
             if (res?.tlcc_graph_data?.withdrawal_freq) dataConverter(res.tlcc_graph_data.withdrawal_freq, setTWD);
             if (res?.graph_data?.deposit_freq) dataConverter(res.graph_data.deposit_freq, setGD);
             if (res?.tlcc_graph_data?.deposit_freq) dataConverter(res.tlcc_graph_data.deposit_freq, setTD);
-            if (res?.buy_sell_dates) setBuySellDates(res.buy_sell_dates);
+            if (selectedId && res?.buy_sell_dates) setBuySellDatesComp(res.buy_sell_dates);
+            if (!selectedId && res?.buy_sell_dates) setBuySellDates(res.buy_sell_dates);
         })();
     };
 

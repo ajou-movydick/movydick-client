@@ -206,6 +206,7 @@ const MainChart = ({
     // selectedId, selectedIdComp,
     graphWithdrawData, graphDepositData, buySellDates,
     fixedSelectedId, fixedSelectedIdComp,
+    buySellDatesComp
 }) => {
     const syncedTimeScale = useRef(new TimeScaleSync());
 
@@ -233,7 +234,7 @@ const MainChart = ({
                 chartId="ethPriceComp"
                 height={iH * 30 / 100}
                 timeScale={syncedTimeScale.current}
-                buySellDates={buySellDates}
+                buySellDates={buySellDatesComp}
                 showTooltip={true}
                 isCompChart={true}
             />
