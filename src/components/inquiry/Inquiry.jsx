@@ -336,6 +336,7 @@ const Inquiry = ({
 
     return (
         <div>
+            <p className={'mb-4 text-2xl font-bold'}>Parameters</p>
             <div className={'mb-3'}>
                 <p className={'mb-1 font-bold'}>Date</p>
                 <div className={'flex items-center w-full'}>
@@ -382,7 +383,7 @@ const Inquiry = ({
                     <div className={'flex-grow'}>
                         <p className={'mb-1 font-bold'}>Fixed Value</p>
                         <div
-                            className={'flex w-full flex-col border-[#B3B3B3] border-[1px] rounded-lg px-3 py-4 gap-2 justify-around'}>
+                            className={'flex w-full flex-col border-[#B3B3B3] border-[1px] rounded-lg px-3 py-2 gap-2 justify-around'}>
                             {Object.keys(mandatoryMappings).map((e) => (
                                 <label key={e}>
                                     <input
@@ -400,7 +401,7 @@ const Inquiry = ({
                 <div className={'w-1/2'}>
                     <p className={'mb-1 font-bold'}>Option</p>
                     <div
-                        className={'flex w-full h-[calc(100%-28px)] flex-col border-[#B3B3B3] border-[1px] rounded-lg px-3 py-4 justify-around'}>
+                        className={'flex w-full h-[calc(100%-28px)] flex-col border-[#B3B3B3] border-[1px] rounded-lg px-3 py-2 justify-around'}>
                         {Object.keys(optionMappings).map((option) => (
                             <label key={option}>
                                 <input
@@ -424,7 +425,7 @@ const Inquiry = ({
                 disabled={!isButtonEnabled()}
                 onClick={handleClickAdapt}
             >
-                ADAPT
+                Search for tendencies
             </button>
         </div>
     );

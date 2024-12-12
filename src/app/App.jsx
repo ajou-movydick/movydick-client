@@ -66,7 +66,7 @@ function App() {
             <div className={'flex flex-row gap-2'}>
                 {/*NAV (left) area*/}
                 <nav className={'w-[30%] flex flex-col gap-2'} style={{ height: 'calc(100vh - 150px)' }}>
-                    <Box className={'w-full px-6 py-9'}>
+                    <Box className={'w-full px-6 py-8'} style={{ height: '100%' }}>
                         <Inquiry dateRange={dateRange}
                             setDateRange={setDateRange}
                             setFixedDateRange={setFixedDateRange}
@@ -76,7 +76,7 @@ function App() {
                             setIsLoading={setIsLoading}
                         />
                     </Box>
-                    <Box className={'w-full px-6 py-9'} style={{ height: 'calc(100% - 400px)' }}>
+                    <Box className={'w-full px-6 py-8'} style={{ height: 'calc(100% - 10px)' }}>
                         <Tendency
                             fixedDateRange={fixedDateRange}
                             strat={strat}

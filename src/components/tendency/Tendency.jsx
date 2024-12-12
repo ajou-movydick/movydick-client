@@ -103,6 +103,7 @@ const Tendency = ({
 
     return (
         <div className={'w-full h-full'}>
+            <p className={'mb-4 text-2xl font-bold'}>Tendencies</p>
             <div className={'w-full flex flex-row justify-between items-center mb-5'}>
                 <div className={'min-w-[320px] flex flex-row gap-2'}>
                     {
@@ -178,7 +179,8 @@ const Tendency = ({
                                         </div>
                                         {e2.thresholds && Object.entries(e2.thresholds).map(([key, value], index) => (
                                             <div key={index} className={'flex flex-row justify-between mb-1'}>
-                                                <span className={'text-[#ababab]'}>Optimal {key.replace('_', ' ')} threshold</span>
+                                                <span
+                                                    className={'text-[#ababab]'}>Optimal {key.replace('_', ' ')} threshold</span>
                                                 <span>{value}</span>
                                             </div>
                                         ))}
