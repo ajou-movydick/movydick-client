@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createChart } from 'lightweight-charts';
-import { TimeScaleSync } from "../common";
+import { OFFSET, TimeScaleSync } from "../common";
 
 
 const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, showTooltip }) => {
@@ -190,6 +190,11 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
 const TlccChart = ({ ethPriceData, graphWithdrawData, tlccWithdrawData, graphDepositData, tlccDepositData, buySellDates }) => {
     const syncedTimeScale = useRef(new TimeScaleSync());
 
+    const [iH, setIH] = useState(781);
+
+    useEffect(() => {
+        setIH(window.innerHeight - OFFSET);
+    }, []);
 
     return (
         <div className="w-full h-full">
@@ -197,7 +202,7 @@ const TlccChart = ({ ethPriceData, graphWithdrawData, tlccWithdrawData, graphDep
             <ChartComponent
                 graphData={tlccWithdrawData}
                 chartId="tlccWithdraw"
-                height={320}
+                height={(iH) * 50 / 100 + 30}
                 timeScale={null}
                 showTooltip={true}
             />
@@ -205,7 +210,7 @@ const TlccChart = ({ ethPriceData, graphWithdrawData, tlccWithdrawData, graphDep
             <ChartComponent
                 graphData={tlccDepositData}
                 chartId="tlccDeposit"
-                height={320}
+                height={(iH) * 50 / 100 + 30}
                 timeScale={null}
                 showTooltip={true}
             />

@@ -106,9 +106,12 @@ class TimeScaleSync {
     };
 }
 
+const OFFSET = 360;
+
 export {
     fetchPost,
     fetchGet,
     dataConverter,
-    TimeScaleSync
+    TimeScaleSync,
+    OFFSET
 };

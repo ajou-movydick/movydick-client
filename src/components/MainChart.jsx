@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createChart } from 'lightweight-charts';
-import { TimeScaleSync } from "../common";
+import { OFFSET, TimeScaleSync } from "../common";
 
 const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, showTooltip, isCompChart }) => {
     const chartContainerRef = useRef(null);
@@ -204,13 +204,19 @@ const MainChart = ({
 }) => {
     const syncedTimeScale = useRef(new TimeScaleSync());
 
+    const [iH, setIH] = useState(781);
+
+    useEffect(() => {
+        setIH(window.innerHeight - OFFSET);
+    }, []);
+
     return (
         <div className="w-full h-full">
             <h1 className={'mb-2'}>Ethereum Price (ETH) {fixedSelectedId}</h1>
             <ChartComponent
                 graphData={ethPriceData}
                 chartId="ethPrice"
-                height={210}
+                height={iH * 30 / 100}
                 timeScale={syncedTimeScale.current}
                 buySellDates={buySellDates}
                 showTooltip={true}
@@ -220,7 +226,7 @@ const MainChart = ({
             <ChartComponent
                 graphData={ethPriceDataComp}
                 chartId="ethPriceComp"
-                height={210}
+                height={iH * 30 / 100}
                 timeScale={syncedTimeScale.current}
                 buySellDates={buySellDates}
                 showTooltip={true}
@@ -231,7 +237,7 @@ const MainChart = ({
                 graphData={graphWithdrawData}
                 chartId="graphWithdraw"
                 showTooltip={true}
-                height={77}
+                height={iH * 20 / 100}
                 timeScale={syncedTimeScale.current}
             />
             <h1 className={'mb-2 mt-2'}>Deposit Frequency (Differentiated by TLCC)</h1>
@@ -239,7 +245,7 @@ const MainChart = ({
                 graphData={graphDepositData}
                 chartId="graphDeposit"
                 showTooltip={true}
-                height={77}
+                height={iH * 20 / 100}
                 timeScale={syncedTimeScale.current}
             />
         </div>
