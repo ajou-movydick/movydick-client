@@ -38,10 +38,9 @@ const Tendency = ({
     };
 
     const handleClickTop = (comb, buy, sell, elementId) => {
-        // FIXME:: active this
-        // if (selectedId && selectedIdComp) {
-        //     return;
-        // }
+        if (selectedId && selectedIdComp) {
+            return;
+        }
 
         if (selectedId) {
             setSelectedIdComp(elementId);

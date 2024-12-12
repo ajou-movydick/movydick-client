@@ -68,19 +68,24 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
 
         if (buySellDates && buySellDates.length > 0) {
             const markers = buySellDates
-                .map((signal, i) => ({
-                    time: signal.date.split(' ')[0],
-                    position: 'aboveBar',
-                    color: signal.action === 'BUY' ? (isCompChart ? '#FFA500' : '#FF4444') : (isCompChart ? '#00FF00' : '#4444FF'),
-                    shape: 'arrowDown',
-                    text: `${signal.action} ${i}${isCompChart ? '' : ''}`
-                }))
+                .map((signal, i) => {
+                    if (signal.date.split(' ')[0].length === 0) return;
+                    return ({
+                        time: signal.date.split(' ')[0],
+                        position: 'aboveBar',
+                        color: signal.action === 'BUY' ? (isCompChart ? '#FFA500' : '#FF4444') : (isCompChart ? '#00FF00' : '#4444FF'),
+                        shape: 'arrowDown',
+                        text: `${signal.action} ${i}${isCompChart ? '' : ''}`
+                    });
+                })
+                .filter(item => item !== undefined)
                 .sort((a, b) => {
                     const timeA = new Date(a.time).getTime();
                     const timeB = new Date(b.time).getTime();
                     return timeA - timeB;
                 });
-            areaSeries.setMarkers(markers);
+
+            if (markers && markers.length) areaSeries.setMarkers(markers);
         }
 
 

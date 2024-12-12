@@ -70,21 +70,39 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
             value: item.value
         }));
         areaSeries.setData(indexedData);
-       
-        if (buySellDates && buySellDates.length > 0) {
-            const markers = buySellDates
-                .map(signal => ({
-                    time: signal.date.split(' ')[0],
-                    position: 'aboveBar',
-                    color: signal.action === 'BUY' ? '#FF4444' : '#4444FF',
-                    shape: 'arrowDown',
-                    text: signal.action
-                }))
-                .sort((a, b) => {
-                    const timeA = new Date(a.time).getTime();
-                    const timeB = new Date(b.time).getTime();
-                    return timeA - timeB;
-                });
+
+        if (indexedData.length > 0) {
+            const maxPoint = indexedData.reduce((max, current) =>
+                current.value > max.value ? current : max
+            );
+
+            const markers = [{
+                time: maxPoint.time,
+                position: 'aboveBar',
+                color: '#FF4444',
+                shape: 'arrowDown',
+                text: `Differential: ${maxPoint.value.toFixed(4)}`
+            }];
+
+            if (buySellDates && buySellDates.length > 0) {
+                const buySellMarkers = buySellDates
+                    .map(signal => ({
+                        time: signal.date.split(' ')[0],
+                        position: 'aboveBar',
+                        color: signal.action === 'BUY' ? '#FF4444' : '#4444FF',
+                        shape: 'arrowDown',
+                        text: signal.action
+                    }))
+                    .filter(marker => marker !== undefined)
+                    .sort((a, b) => {
+                        const timeA = new Date(a.time).getTime();
+                        const timeB = new Date(b.time).getTime();
+                        return timeA - timeB;
+                    });
+
+                markers.push(...buySellMarkers);
+            }
+
             areaSeries.setMarkers(markers);
         }
 
@@ -171,9 +189,6 @@ const ChartComponent = ({ graphData, chartId, height, timeScale, buySellDates, s
 
         return () => {
             window.removeEventListener('resize', handleResize);
-            // if (chartContainerRef.current && toolTip) {
-            //     chartContainerRef.current.removeChild(toolTip);
-            // }
             chart.unsubscribeCrosshairMove();
             timeScale?.unsubscribeAll();
             chart.remove();
